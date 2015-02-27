@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Stream</title>
+</head>
+<body>
+
+<input id="typeahead" type="text" placeholder="Search">
+
+<script src="{{ static_url('vendor/jquery-1.11.2.min.js') }}"></script>
+<script src="{{ static_url('vendor/typeahead.bundle.min.js') }}"></script>
+<script>
+var search = new Bloodhound({
+    datumTokenizer: function (d) {
+        console.log(d);
+        Bloodhound.tokenizers.obj.whitespace("title");
+    },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+        url: '/complete?q=%QUERY',
+        filter: function (resp) {
+            return resp.results;
+        }
+    }
+});
+search.initialize();
+$('#typeahead').typeahead(null, {
+    name: 'search',
+    displayKey: 'title',
+    minLength: 3,
+    hint: false,
+    source: search.ttAdapter()
+})
+.on("typeahead:selected", function (e, o) {
+    console.log(o.title);
+    window.location = "/stream/" + o.id;
+});
+
+</script>
+</body>
+</html>
