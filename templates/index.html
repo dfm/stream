@@ -4,14 +4,76 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <title>Stream</title>
+
+<style>
+
+#typeahead {
+    width: 500px;
+}
+
+.complete:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.complete .artwork {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    float: left;
+    padding: 0 10px 0 0;
+}
+
+.complete .metadata {
+    display: inline-block;
+    height: 50px;
+    width: 440px;
+    float: left;
+}
+
+.complete .title {
+    display: block;
+    font-size: 18px;
+    height: 35px;
+    line-height: 40px;
+    width: 440px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.complete .artist {
+    display: block;
+    font-size: 13px;
+    height: 15px;
+    line-height: 10px;
+    white-space: nowrap;
+}
+
+</style>
 </head>
 <body>
 
 <input id="typeahead" type="text" placeholder="Search">
 
+<script type="x-tmpl-mustache" id="template">
+<div class="complete">
+    <img class="artwork" src="{{! artwork_url }}">
+    <div class="metadata">
+        <div class="title">{{! title }}</div>
+        <div class="artist">{{! user }}</div>
+    </div>
+</div>
+</script>
+
 <script src="{{ static_url('vendor/jquery-1.11.2.min.js') }}"></script>
 <script src="{{ static_url('vendor/typeahead.bundle.min.js') }}"></script>
+<script src="{{ static_url('vendor/mustache.min.js') }}"></script>
 <script>
+var template = $('#template').html();
+Mustache.parse(template);
+
 var search = new Bloodhound({
     datumTokenizer: function (d) {
         console.log(d);
@@ -31,7 +93,12 @@ $('#typeahead').typeahead(null, {
     displayKey: 'title',
     minLength: 3,
     hint: false,
-    source: search.ttAdapter()
+    source: search.ttAdapter(),
+    templates: {
+        suggestion: function (o) {
+            return Mustache.render(template, o);
+        }
+    }
 })
 .on("typeahead:selected", function (e, o) {
     console.log(o.title);
