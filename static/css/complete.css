@@ -1,0 +1,43 @@
+#typeahead {
+  width: 500px;
+}
+
+.complete:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.complete .artwork {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  float: left;
+  padding: 0 10px 0 0;
+}
+
+.complete .metadata {
+  display: inline-block;
+  height: 50px;
+  width: 440px;
+  float: left;
+}
+
+.complete .title {
+  display: block;
+  font-size: 18px;
+  height: 35px;
+  line-height: 40px;
+  width: 440px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.complete .artist {
+  display: block;
+  font-size: 13px;
+  height: 15px;
+  line-height: 10px;
+  white-space: nowrap;
+}
